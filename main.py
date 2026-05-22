@@ -1,4 +1,8 @@
 from flask import Flask
+from database import testDatabaseConnection
+
+if not testDatabaseConnection():
+    exit()
 
 app = Flask(__name__)
 
