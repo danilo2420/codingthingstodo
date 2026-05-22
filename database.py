@@ -24,3 +24,18 @@ def testDatabaseConnection():
     except:
         print("Database connection failed")
         return False
+    
+
+def getIdeasCollection():
+    try:
+        return client["list"]["ideas"]
+    except:
+        return None
+
+def docToDict(doc):
+    if "_id" in doc:
+        doc["_id"] = str(doc["_id"])
+    return doc
+
+def docsToArray(docs):
+    return [docToDict(doc) for doc in docs]
