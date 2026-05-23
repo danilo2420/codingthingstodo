@@ -1,13 +1,37 @@
 from flask import Blueprint, make_response, jsonify, request
-from database import getIdeasCollection, docsToArray, protected
+from database import getIdeasCollection, docsToArray, protected, docToDict
+from bson import ObjectId
 
 ideas_bp = Blueprint("ideas", __name__, url_prefix="/ideas")
+collection = getIdeasCollection()
 
 @ideas_bp.route("/list")
 @protected
 def listIdeas():
-    collection = getIdeasCollection()
-
     if collection is None:
         return make_response({"error": "Collection could not be loaded"}, 500)
     return jsonify(docsToArray(collection.find()))
+
+@ideas_bp.route("/read/<id>")
+@protected
+def readIdea(id):
+    try:
+        objectId = ObjectId(id)
+        return jsonify(docToDict(collection.find_one({"_id": objectId})))
+    except Exception as e:
+        return jsonify({"error": f"there was an exception: {e}"}, 500)
+
+@ideas_bp.route("/create", methods=["POST"])
+@protected
+def createIdea():
+    pass
+
+@ideas_bp.route("/update")
+@protected
+def updateIdea():
+    pass
+
+@ideas_bp.route("/delete/<id>")
+@protected
+def deleteIdea(id):
+    pass

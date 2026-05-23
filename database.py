@@ -36,6 +36,7 @@ def protected(fn):
             return fn(*args, **kwargs)
         except Exception as e:
             return jsonify({"error": "authentication failed"}, 400)
+    wrapper.__name__ = fn.__name__
     return wrapper
 
 def getIdeasCollection():
