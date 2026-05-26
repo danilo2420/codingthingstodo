@@ -1,5 +1,5 @@
 from flask import Blueprint, make_response, jsonify, request
-from database import getIdeasCollection, docsToArray, protected, docToDict
+from database import getIdeasCollection, docsToArray, protected, docToDict, validateItem
 from bson import ObjectId
 
 ideas_bp = Blueprint("ideas", __name__, url_prefix="/ideas")
@@ -29,8 +29,8 @@ def readIdea(id):
 def createIdea():
     try:
         item = request.json
-
-        # TODO: add validation of object here
+        if not validateItem(item):
+            return {"error": "sent object is not valid"}, 400
 
         insert_response = collection.insert_one(item)
         return {"inserted_id": str(insert_response.inserted_id)}, 200

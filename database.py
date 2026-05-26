@@ -52,3 +52,10 @@ def docToDict(doc):
 
 def docsToArray(docs):
     return [docToDict(doc) for doc in docs]
+
+def validateItem(item):
+    if "name" not in item: return False
+    if "description" not in item: return False
+    if "interest" not in item: return False
+
+    return True
