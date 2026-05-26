@@ -28,7 +28,7 @@ def readIdea(id):
 @protected
 def createIdea():
     try:
-        item = request.json["item"]
+        item = request.json
 
         # TODO: add validation of object here
 
