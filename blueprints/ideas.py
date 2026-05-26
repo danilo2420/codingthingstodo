@@ -17,6 +17,9 @@ def listIdeas():
 def readIdea(id):
     try:
         objectId = ObjectId(id)
+        read_response = collection.find_one({"_id": objectId}) 
+        if read_response is None:
+            return {"error": "not found"}, 404
         return jsonify(docToDict(collection.find_one({"_id": objectId})))
     except Exception as e:
         return jsonify({"error": f"there was an exception: {e}"}, 500)
@@ -40,7 +43,7 @@ def createIdea():
 def updateIdea():
     pass
 
-@ideas_bp.route("/delete/<id>")
+@ideas_bp.route("/delete/<id>", methods=["DELETE"])
 @protected
 def deleteIdea(id):
     try:
