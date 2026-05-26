@@ -24,7 +24,16 @@ def readIdea(id):
 @ideas_bp.route("/create", methods=["POST"])
 @protected
 def createIdea():
-    pass
+    try:
+        item = request.json["item"]
+
+        # TODO: add validation of object here
+
+        insert_response = collection.insert_one(item)
+        return {"inserted_id": str(insert_response.inserted_id)}, 200
+    except Exception as e:
+        return {"error": f"There was an error: {e}"}, 500
+
 
 @ideas_bp.route("/update")
 @protected
