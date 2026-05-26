@@ -43,4 +43,14 @@ def updateIdea():
 @ideas_bp.route("/delete/<id>")
 @protected
 def deleteIdea(id):
-    pass
+    try:
+        objectId = ObjectId(id)
+        delete_response = collection.delete_one({"_id": objectId})
+
+        if delete_response.deleted_count >= 1:
+            return {"message": "item deleted successfully"}, 200
+        else:
+            return {"error": "item not found"}, 404
+
+    except Exception as e:
+        return {"error": f"There was an exception: {e}"}, 400
