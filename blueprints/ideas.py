@@ -38,10 +38,19 @@ def createIdea():
         return {"error": f"There was an error: {e}"}, 500
 
 
-@ideas_bp.route("/update")
+@ideas_bp.route("/update/<id>", methods=["POST"])
 @protected
-def updateIdea():
-    pass
+def updateIdea(id):
+    try:
+        objectId = ObjectId(id)
+        update_object = request.json
+        update_response = collection.update_one({"_id": objectId}, update_object)
+        if update_response.modified_count >= 1:
+            return {"message": "item modified successfully"}, 200
+        else:
+            return {"error": "item not found"}, 404
+    except Exception as e:
+        return {"error": f"There was an exception: {e}"}, 400
 
 @ideas_bp.route("/delete/<id>", methods=["DELETE"])
 @protected
